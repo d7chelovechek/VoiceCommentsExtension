@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" 
+			  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<Extern href="stdidcmd.h"/>
+	<Extern href="vsshlids.h"/>
+	<Include href="KnownImageIds.vsct"/>
+	<Include href="VSGlobals.vsct"/>
+
+	<Commands package="VoiceCommentsExtensionPackage">
+		<Buttons>
+			<Button guid="VoiceCommentsExtensionPackage" 
+					id="OpenRecorderWindowCommandId" 
+					priority="0x9999" 
+					type="Button">
+				<Parent guid="guidSHLMainMenu"
+						id="IDG_VS_EDIT_CUTCOPY"/>
+				<Icon guid="ImageCatalogGuid" 
+					  id="AudioRecording"/>
+				<CommandFlag>IconIsMoniker</CommandFlag>
+				<Strings>
+					<ButtonText>Record Voice Comment</ButtonText>
+				</Strings>
+			</Button>
+		</Buttons>
+	</Commands>
+
+	<KeyBindings>
+		<KeyBinding guid="VoiceCommentsExtensionPackage"
+					id="OpenRecorderWindowCommandId"
+					mod1="Control"
+					key1="K"
+					mod2="Shift"
+					key2="R"
+				editor="guidVSStd97"/>
+	</KeyBindings>
+
+	<CommandPlacements>
+		<CommandPlacement guid="VoiceCommentsExtensionPackage"
+						  id="OpenRecorderWindowCommandId"
+						  priority="9999">
+			<Parent guid="guidSHLMainMenu"
+					id="IDG_VS_CODEWIN_TEXTEDIT" />
+		</CommandPlacement>
+	</CommandPlacements>
+
+	<Symbols>
+		<GuidSymbol name="VoiceCommentsExtensionPackage"
+					value="{579efc8e-9144-48c6-abb3-c004b28793f7}">
+			<IDSymbol name="OpenRecorderWindowCommandId"
+					  value="0x9999" />
+			<IDSymbol name="PasteVoiceCommentCommandId"
+					  value="0x0100" />
+		</GuidSymbol>
+	</Symbols>
+</CommandTable>
