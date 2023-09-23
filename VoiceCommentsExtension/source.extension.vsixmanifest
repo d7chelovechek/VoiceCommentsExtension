@@ -4,9 +4,9 @@
         <Identity Id="VoiceCommentsExtension.8d5f40ed-e801-469d-a3c6-1964b0df796d" Version="1.0" Language="en-US" Publisher="Ayrat Khaydarov (d7chelovechek)" />
         <DisplayName>Voice Comments Extension for Visual Studio 2022</DisplayName>
         <Description xml:space="preserve">An extension for Visual Studio that allows to record and listen voice comments on code.</Description>
-        <License>Resources\LICENSE.txt</License>
-        <Icon>Resources\Icon.png</Icon>
-        <PreviewImage>Resources\Icon.png</PreviewImage>
+        <License>LICENSE.txt</License>
+        <Icon>Icon.png</Icon>
+        <PreviewImage>Icon.png</PreviewImage>
         <Tags>voice;comments;voice-comments;visual-studio</Tags>
     </Metadata>
     <Installation>
