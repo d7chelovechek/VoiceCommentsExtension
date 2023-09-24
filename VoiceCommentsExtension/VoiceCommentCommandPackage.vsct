@@ -11,7 +11,7 @@
 	<Commands package="VoiceCommentsExtensionPackage">
 		<Buttons>
 			<Button guid="VoiceCommentsExtensionPackage" 
-					id="OpenRecorderWindowCommandId" 
+					id="RecordVoiceCommentCommandId" 
 					priority="0x9999" 
 					type="Button">
 				<Parent guid="guidSHLMainMenu"
@@ -28,7 +28,7 @@
 
 	<KeyBindings>
 		<KeyBinding guid="VoiceCommentsExtensionPackage"
-					id="OpenRecorderWindowCommandId"
+					id="RecordVoiceCommentCommandId"
 					mod1="Control"
 					key1="K"
 					mod2="Shift"
@@ -38,7 +38,7 @@
 
 	<CommandPlacements>
 		<CommandPlacement guid="VoiceCommentsExtensionPackage"
-						  id="OpenRecorderWindowCommandId"
+						  id="RecordVoiceCommentCommandId"
 						  priority="9999">
 			<Parent guid="guidSHLMainMenu"
 					id="IDG_VS_CODEWIN_TEXTEDIT" />
@@ -48,10 +48,8 @@
 	<Symbols>
 		<GuidSymbol name="VoiceCommentsExtensionPackage"
 					value="{579efc8e-9144-48c6-abb3-c004b28793f7}">
-			<IDSymbol name="OpenRecorderWindowCommandId"
+			<IDSymbol name="RecordVoiceCommentCommandId"
 					  value="0x9999" />
-			<IDSymbol name="PasteVoiceCommentCommandId"
-					  value="0x0100" />
 		</GuidSymbol>
 	</Symbols>
 </CommandTable>
