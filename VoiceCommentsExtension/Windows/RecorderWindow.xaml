@@ -5,12 +5,68 @@
                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                         xmlns:platform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
                         xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
+                        xmlns:viewModels="clr-namespace:VoiceCommentsExtension.ViewModels"
+                        xmlns:converters="clr-namespace:VoiceCommentsExtension.Converters"
                         toolkit:Themes.UseVsTheme="True"
                         mc:Ignorable="d"
-                        Width="600"
-                        Height="400">
+                        Title="Voice Comment Recorder"
+                        Width="300"
+                        ResizeMode="NoResize"
+                        Height="125"
+                        FontFamily="Cascadia Code"
+                        FontSize="14">
+    <platform:DialogWindow.Resources>
+        <ResourceDictionary>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:LongToStringConverter x:Key="LongToStringConverter"/>
+        </ResourceDictionary>
+    </platform:DialogWindow.Resources>
+    <platform:DialogWindow.DataContext>
+        <viewModels:RecorderViewModel/>
+    </platform:DialogWindow.DataContext>
     <Grid>
-        <Button Width="50"
-                Height="50"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="{Binding MillisecondsElapsed, Converter={StaticResource LongToStringConverter}}"
+                   Grid.ColumnSpan="3"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+
+        <Button Content="Save"
+                Grid.Row="1"
+                IsEnabled="{Binding IsRecordingStarted}"
+                Command="{Binding SaveVoiceCommentCommand}"
+                CommandParameter="{Binding}"
+                Margin="5 0 2.5 5"/>
+        
+        <Button Content="Pause"
+                Grid.Row="1"
+                Grid.Column="1"
+                Visibility="{Binding IsRecording, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"
+                Command="{Binding PauseRecordVoiceCommentCommand}"
+                CommandParameter="{Binding}"
+                Margin="2.5 0 2.5 5"/>
+        <Button Content="Record"
+                Grid.Row="1"
+                Grid.Column="1"
+                Visibility="{Binding IsRecording, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}"
+                Command="{Binding StartRecordVoiceCommentCommand}"
+                CommandParameter="{Binding}"
+                Margin="2.5 0 2.5 5"/>
+        
+        <Button Content="Cancel"
+                Grid.Row="1"
+                Grid.Column="2"
+                Command="{Binding CancelRecordVoiceCommentCommand}"
+                CommandParameter="{Binding}"
+                Margin="2.5 0 5 5"/>
     </Grid>
 </platform:DialogWindow>

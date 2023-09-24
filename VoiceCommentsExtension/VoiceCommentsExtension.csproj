@@ -52,10 +52,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Commands\OpenRecorderWindowCommand.cs" />
+    <Compile Include="Commands\BaseTypedCommand.cs" />
+    <Compile Include="Commands\RecorderCommands\CancelRecordVoiceCommentCommand.cs" />
+    <Compile Include="Commands\RecorderCommands\SaveVoiceCommentCommand.cs" />
+    <Compile Include="Commands\RecorderCommands\StartRecordVoiceCommentCommand.cs" />
+    <Compile Include="Commands\RecorderCommands\PauseRecordVoiceCommentCommand.cs" />
+    <Compile Include="Converters\BaseValueConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\LongToStringConverter.cs" />
+    <Compile Include="ExtensionCommands\OpenRecorderWindowCommand.cs" />
+    <Compile Include="Services\RecordingService.cs" />
+    <Compile Include="Services\VisualStudioService.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\RecorderViewModel.cs" />
+    <Compile Include="WorkLayer\VoiceCommentsLayer.cs" />
+    <Compile Include="WorkLayer\WpfTextViewCreationListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Commands\PasteVoiceCommentCommand.cs" />
-    <Compile Include="Services\WindowsService.cs" />
+    <Compile Include="Components\VoiceCommentView.xaml.cs">
+      <DependentUpon>VoiceCommentView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\RecorderWindow.xaml.cs">
       <DependentUpon>RecorderWindow.xaml</DependentUpon>
     </Compile>
@@ -84,12 +99,14 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Design" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +118,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="NAudio">
+      <Version>2.2.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="VoiceCommentCommandPackage.vsct">
@@ -110,6 +130,10 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Components\VoiceCommentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\RecorderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -120,7 +144,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

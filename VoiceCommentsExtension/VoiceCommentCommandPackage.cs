@@ -20,7 +20,6 @@ namespace VoiceCommentsExtension
     /// </summary>
     internal sealed partial class PackageIds
     {
-        public const int OpenRecorderWindowCommandId = 0x9999;
-        public const int PasteVoiceCommentCommandId = 0x0100;
+        public const int RecordVoiceCommentCommandId = 0x9999;
     }
 }
