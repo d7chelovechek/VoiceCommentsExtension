@@ -12,7 +12,7 @@ namespace VoiceCommentsExtension.Commands.RecorderCommands
             {
                 viewModel.IsRecordingStarted = true;
 
-                viewModel.RecordingService.StartRecording();
+                viewModel.Recorder.StartRecording();
             }
 
             viewModel.IsRecording = true;

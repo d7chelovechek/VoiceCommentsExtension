@@ -4,7 +4,7 @@ using System.IO;
 
 namespace VoiceCommentsExtension.Services
 {
-    public class RecordingService
+    public class RecorderService
     {
         public string FilePath { get; private set; }
 
@@ -16,9 +16,10 @@ namespace VoiceCommentsExtension.Services
 
         public event Action CloseWindowNeeded;
 
-        public RecordingService()
+        public RecorderService()
         {
-            FilePath = $"{VisualStudioService.GetVoicesDirectory()}\\{Guid.NewGuid()}.wav";
+            string fileName = Guid.NewGuid().ToString().Split('-')[4];
+            FilePath = $"{VisualStudioService.GetVoicesDirectory()}\\{fileName}.wav";
 
             if (FilePath is null)
             {

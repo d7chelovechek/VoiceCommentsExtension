@@ -12,13 +12,13 @@ namespace VoiceCommentsExtension.Commands.RecorderCommands
             viewModel.RecordingResult = false;
             if (!viewModel.IsRecordingStarted)
             {
-                viewModel.RecordingService.InvokeCloseWindowNeededEvent();
+                viewModel.Recorder.InvokeCloseWindowNeededEvent();
 
                 return;
             }
             
-            viewModel.RecordingService.DeleteFileNeeded = true;
-            viewModel.RecordingService.StopRecording();
+            viewModel.Recorder.DeleteFileNeeded = true;
+            viewModel.Recorder.StopRecording();
         }
     }
 }

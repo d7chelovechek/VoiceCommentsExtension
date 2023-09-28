@@ -57,18 +57,26 @@
     <Compile Include="Commands\RecorderCommands\SaveVoiceCommentCommand.cs" />
     <Compile Include="Commands\RecorderCommands\StartRecordVoiceCommentCommand.cs" />
     <Compile Include="Commands\RecorderCommands\PauseRecordVoiceCommentCommand.cs" />
+    <Compile Include="Converters\BarValueToBarHeightConverter.cs" />
+    <Compile Include="Converters\BarWidthToMarginConverter.cs" />
+    <Compile Include="Converters\BaseMultiValueConverter.cs" />
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\LongToStringConverter.cs" />
+    <Compile Include="Converters\ChartWidthToBarWidthConverter.cs" />
+    <Compile Include="Converters\MillisecondsToStringViewConverter.cs" />
     <Compile Include="ExtensionCommands\OpenRecorderWindowCommand.cs" />
-    <Compile Include="Services\RecordingService.cs" />
+    <Compile Include="Services\CommentsService.cs" />
+    <Compile Include="Services\PlayerService.cs" />
+    <Compile Include="Services\RecorderService.cs" />
     <Compile Include="Services\VisualStudioService.cs" />
+    <Compile Include="ViewModels\BarViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\RecorderViewModel.cs" />
+    <Compile Include="ViewModels\VoiceCommentViewModel.cs" />
     <Compile Include="WorkLayer\VoiceCommentsLayer.cs" />
     <Compile Include="WorkLayer\WpfTextViewCreationListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Components\VoiceCommentView.xaml.cs">
+    <Compile Include="Views\VoiceCommentView.xaml.cs">
       <DependentUpon>VoiceCommentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RecorderWindow.xaml.cs">
@@ -130,7 +138,7 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Components\VoiceCommentView.xaml">
+    <Page Include="Views\VoiceCommentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -149,7 +157,16 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\VoiceCommentsExtension.Extensions\VoiceCommentsExtension.Extensions.csproj">
+      <Project>{db1e22e1-6566-47ae-ac60-80399ac8f490}</Project>
+      <Name>VoiceCommentsExtension.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VoiceCommentsExtension.Models\VoiceCommentsExtension.Models.csproj">
+      <Project>{744e3052-702f-4615-be00-c711b952862c}</Project>
+      <Name>VoiceCommentsExtension.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

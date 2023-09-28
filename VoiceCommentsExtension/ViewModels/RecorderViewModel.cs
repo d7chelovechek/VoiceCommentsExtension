@@ -10,10 +10,10 @@ namespace VoiceCommentsExtension.ViewModels
     {
         public bool IsRecording
         {
-            get => RecordingService.IsRecording;
+            get => Recorder.IsRecording;
             set
             {
-                RecordingService.IsRecording = value;
+                Recorder.IsRecording = value;
 
                 OnPropertyChanged(nameof(IsRecording));
             }
@@ -31,7 +31,7 @@ namespace VoiceCommentsExtension.ViewModels
         }
         private bool _recordingStarted;
 
-        public long MillisecondsElapsed
+        public double MillisecondsElapsed
         {
             get => _millisecondsElapsed;
             set
@@ -41,13 +41,13 @@ namespace VoiceCommentsExtension.ViewModels
                 OnPropertyChanged(nameof(MillisecondsElapsed));
             }
         }
-        private long _millisecondsElapsed;
+        private double _millisecondsElapsed;
 
         public DispatcherTimer Timer { get; set; }
 
         public bool? RecordingResult { get; set; }
 
-        public RecordingService RecordingService { get; private set; }
+        public RecorderService Recorder { get; private set; }
 
         public ICommand CancelRecordVoiceCommentCommand { get; private set; }
         public ICommand PauseRecordVoiceCommentCommand { get; private set; }
@@ -60,7 +60,7 @@ namespace VoiceCommentsExtension.ViewModels
 
         public RecorderViewModel()
         {
-            RecordingService = new RecordingService();
+            Recorder = new RecorderService();
 
             Timer = new DispatcherTimer(DispatcherPriority.Render)
             {

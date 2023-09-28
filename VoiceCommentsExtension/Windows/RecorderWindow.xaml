@@ -1,12 +1,12 @@
 ﻿<platform:DialogWindow  x:Class="VoiceCommentsExtension.Windows.RecorderWindow"
                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                        xmlns:platform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
                         xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
-                        xmlns:viewModels="clr-namespace:VoiceCommentsExtension.ViewModels"
+                        xmlns:platform="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
                         xmlns:converters="clr-namespace:VoiceCommentsExtension.Converters"
+                        xmlns:viewModels="clr-namespace:VoiceCommentsExtension.ViewModels"
                         toolkit:Themes.UseVsTheme="True"
                         mc:Ignorable="d"
                         Title="Voice Comment Recorder"
@@ -18,7 +18,7 @@
     <platform:DialogWindow.Resources>
         <ResourceDictionary>
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-            <converters:LongToStringConverter x:Key="LongToStringConverter"/>
+            <converters:MillisecondsToStringViewConverter x:Key="MillisecondsToStringViewConverter"/>
         </ResourceDictionary>
     </platform:DialogWindow.Resources>
     <platform:DialogWindow.DataContext>
@@ -35,7 +35,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{Binding MillisecondsElapsed, Converter={StaticResource LongToStringConverter}}"
+        <TextBlock Text="{Binding MillisecondsElapsed, Converter={StaticResource MillisecondsToStringViewConverter}, ConverterParameter=true}"
                    Grid.ColumnSpan="3"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
