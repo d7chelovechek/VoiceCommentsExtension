@@ -11,7 +11,7 @@ namespace VoiceCommentsExtension.Commands.RecorderCommands
 
             viewModel.RecordingResult = true;
 
-            viewModel.RecordingService.StopRecording();
+            viewModel.Recorder.StopRecording();
         }
     }
 }

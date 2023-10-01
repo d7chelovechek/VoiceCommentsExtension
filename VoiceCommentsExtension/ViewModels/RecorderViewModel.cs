@@ -6,14 +6,14 @@ using VoiceCommentsExtension.Services;
 
 namespace VoiceCommentsExtension.ViewModels
 {
-    public class RecorderViewModel : BaseViewModel
+    public class RecorderViewModel : BaseViewModel, IDisposable
     {
         public bool IsRecording
         {
-            get => RecordingService.IsRecording;
+            get => Recorder.IsRecording;
             set
             {
-                RecordingService.IsRecording = value;
+                Recorder.IsRecording = value;
 
                 OnPropertyChanged(nameof(IsRecording));
             }
@@ -31,7 +31,7 @@ namespace VoiceCommentsExtension.ViewModels
         }
         private bool _recordingStarted;
 
-        public long MillisecondsElapsed
+        public double MillisecondsElapsed
         {
             get => _millisecondsElapsed;
             set
@@ -41,26 +41,28 @@ namespace VoiceCommentsExtension.ViewModels
                 OnPropertyChanged(nameof(MillisecondsElapsed));
             }
         }
-        private long _millisecondsElapsed;
+        private double _millisecondsElapsed;
 
-        public DispatcherTimer Timer { get; set; }
+        public DispatcherTimer Timer { get; private set; }
 
         public bool? RecordingResult { get; set; }
 
-        public RecordingService RecordingService { get; private set; }
+        public RecorderService Recorder { get; private set; }
 
-        public ICommand CancelRecordVoiceCommentCommand { get; private set; }
-        public ICommand PauseRecordVoiceCommentCommand { get; private set; }
+        public ICommand CancelRecordingCommand { get; private set; }
+        public ICommand StopRecordingCommand { get; private set; }
         public ICommand SaveVoiceCommentCommand { get; private set; }
-        public ICommand StartRecordVoiceCommentCommand { get; private set; }
+        public ICommand StartRecordingCommand { get; private set; }
 
         public event Action ClosingWindow;
 
         private const int _interval = 100;
 
+        private bool _isDisposed;
+
         public RecorderViewModel()
         {
-            RecordingService = new RecordingService();
+            Recorder = new RecorderService();
 
             Timer = new DispatcherTimer(DispatcherPriority.Render)
             {
@@ -81,10 +83,28 @@ namespace VoiceCommentsExtension.ViewModels
 
         protected override void InitializeCommands()
         {
-            CancelRecordVoiceCommentCommand = new CancelRecordVoiceCommentCommand();
-            PauseRecordVoiceCommentCommand = new PauseRecordVoiceCommentCommand();
+            base.InitializeCommands();
+
+            CancelRecordingCommand = new CancelRecordingCommand();
+            StopRecordingCommand = new StopRecordingCommand();
             SaveVoiceCommentCommand = new SaveVoiceCommentCommand();
-            StartRecordVoiceCommentCommand = new StartRecordVoiceCommentCommand();
+            StartRecordingCommand = new StartRecordingCommand();
+        }
+
+        public void Dispose()
+        {
+            if (_isDisposed)
+            {
+                return;
+            }
+            _isDisposed = true;
+
+            UnsubscribeFromEvents();
+        }
+
+        private void UnsubscribeFromEvents()
+        {
+            Timer.Tick -= Timer_Tick;
         }
     }
 }

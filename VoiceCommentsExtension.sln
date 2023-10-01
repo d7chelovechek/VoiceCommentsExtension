@@ -5,6 +5,15 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceCommentsExtension", "VoiceCommentsExtension\VoiceCommentsExtension.csproj", "{FAF21F11-499B-436E-8ED6-50516D7E8111}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceCommentsExtension.Models", "VoiceCommentsExtension.Models\VoiceCommentsExtension.Models.csproj", "{744E3052-702F-4615-BE00-C711B952862C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceCommentsExtension.Extensions", "VoiceCommentsExtension.Extensions\VoiceCommentsExtension.Extensions.csproj", "{DB1E22E1-6566-47AE-AC60-80399AC8F490}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{17CBE69E-73FA-44D9-A4CD-CBFF6DBB966F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +36,30 @@ Global
 		{FAF21F11-499B-436E-8ED6-50516D7E8111}.Release|arm64.Build.0 = Release|arm64
 		{FAF21F11-499B-436E-8ED6-50516D7E8111}.Release|x86.ActiveCfg = Release|x86
 		{FAF21F11-499B-436E-8ED6-50516D7E8111}.Release|x86.Build.0 = Release|x86
+		{744E3052-702F-4615-BE00-C711B952862C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{744E3052-702F-4615-BE00-C711B952862C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{744E3052-702F-4615-BE00-C711B952862C}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{744E3052-702F-4615-BE00-C711B952862C}.Debug|arm64.Build.0 = Debug|Any CPU
+		{744E3052-702F-4615-BE00-C711B952862C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{744E3052-702F-4615-BE00-C711B952862C}.Debug|x86.Build.0 = Debug|Any CPU
+		{744E3052-702F-4615-BE00-C711B952862C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{744E3052-702F-4615-BE00-C711B952862C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{744E3052-702F-4615-BE00-C711B952862C}.Release|arm64.ActiveCfg = Release|Any CPU
+		{744E3052-702F-4615-BE00-C711B952862C}.Release|arm64.Build.0 = Release|Any CPU
+		{744E3052-702F-4615-BE00-C711B952862C}.Release|x86.ActiveCfg = Release|Any CPU
+		{744E3052-702F-4615-BE00-C711B952862C}.Release|x86.Build.0 = Release|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Debug|arm64.Build.0 = Debug|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Debug|x86.Build.0 = Debug|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Release|arm64.ActiveCfg = Release|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Release|arm64.Build.0 = Release|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB1E22E1-6566-47AE-AC60-80399AC8F490}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using System.IO;
 using System.Threading.Tasks;
+using VoiceCommentsExtension.Services;
 using VoiceCommentsExtension.Windows;
 
 namespace VoiceCommentsExtension.ExtensionCommands
@@ -18,7 +19,10 @@ namespace VoiceCommentsExtension.ExtensionCommands
 
             DocumentView document = await VS.Documents.GetActiveDocumentViewAsync();
 
-            if (document is null)
+            if (document is null ||
+                CommentsService.SupportedContentTypes
+                    [document.TextBuffer.ContentType.TypeName] 
+                        is not string commentPattern)
             {
                 return;
             }
@@ -28,13 +32,16 @@ namespace VoiceCommentsExtension.ExtensionCommands
             var dialog = new RecorderWindow();
             dialog.ShowDialog();
 
+            dialog.ViewModel.Dispose();
+
             switch (dialog.ViewModel.RecordingResult)
             {
                 case true:
                     {
-                        document?.TextBuffer.Insert(
+                        document.TextBuffer.Insert(
                             point,
-                            $"\r\n// <voice-comment:{Path.GetFileName(dialog.ViewModel.RecordingService.FilePath)}>");
+                            $"\r\n{commentPattern} <voice-comment>" +
+                            $"\r\n{commentPattern} {Path.GetFileName(dialog.ViewModel.Recorder.FilePath)}");
 
                         if (ServiceProvider.GlobalProvider.GetService(typeof(DTE)) is DTE2 dte)
                         {

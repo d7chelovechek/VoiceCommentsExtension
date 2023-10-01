@@ -1,13 +1,10 @@
 ﻿using Microsoft.VisualStudio.PlatformUI;
-using Microsoft.VisualStudio.Threading;
 using System;
-using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using VoiceCommentsExtension.Services;
 using VoiceCommentsExtension.ViewModels;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace VoiceCommentsExtension.Windows
 {
@@ -31,7 +28,7 @@ namespace VoiceCommentsExtension.Windows
 
         private void SubscribeToEvents()
         {
-            ViewModel.RecordingService.CloseWindowNeeded += OnCloseWindowNeeded;
+            ViewModel.Recorder.CloseWindowNeeded += OnCloseWindowNeeded;
             ViewModel.ClosingWindow += OnClosingWindow;
         }
 
@@ -43,7 +40,7 @@ namespace VoiceCommentsExtension.Windows
 
         public void UnsubscribeFromEvents()
         {
-            ViewModel.RecordingService.CloseWindowNeeded -= OnCloseWindowNeeded;
+            ViewModel.Recorder.CloseWindowNeeded -= OnCloseWindowNeeded;
             ViewModel.ClosingWindow -= OnClosingWindow;
         }
 
@@ -86,8 +83,8 @@ namespace VoiceCommentsExtension.Windows
 
             if (ViewModel.IsRecordingStarted)
             {
-                ViewModel.RecordingService.DeleteFileNeeded = true;
-                ViewModel.RecordingService.StopRecording();
+                ViewModel.Recorder.DeleteFileNeeded = true;
+                ViewModel.Recorder.StopRecording();
             }
         }
     }

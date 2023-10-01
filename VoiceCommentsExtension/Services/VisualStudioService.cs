@@ -1,7 +1,13 @@
 ﻿using EnvDTE;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
-using System;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Text.Formatting;
 using System.IO;
+using System.Windows.Media;
+using VoiceCommentsExtension.Views;
+using VoiceCommentsExtension.WorkLayer;
 
 namespace VoiceCommentsExtension.Services
 {
@@ -11,13 +17,28 @@ namespace VoiceCommentsExtension.Services
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var serviceProvider = ServiceProvider.GlobalProvider;
-            if (serviceProvider.GetService(typeof(DTE)) is DTE dte)
+            if (ServiceProvider.GlobalProvider.GetService(typeof(DTE)) is DTE dte &&
+                dte.Properties["FontsAndColors", "TextEditor"]
+                    .Item("FontFamily").Value is string fontFamily)
             {
-                return dte.Properties["FontsAndColors", "TextEditor"].Item("FontFamily").Value as string;
+                return fontFamily;
             }
 
             return "Cascadia Code";
+        }
+
+        public static double GetCurrentEditorFontSize()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (ServiceProvider.GlobalProvider.GetService(typeof(DTE)) is DTE dte &&
+                dte.Properties["FontsAndColors", "TextEditor"]
+                    .Item("FontSize").Value is double fontSize)
+            {
+                return fontSize;
+            }
+
+            return 12;
         }
 
         public static string GetVoicesDirectory()
@@ -41,6 +62,32 @@ namespace VoiceCommentsExtension.Services
             else
             {
                 return null;
+            }
+        }
+
+        public static void UpdateTheme(VoiceCommentsLayer layer, VoiceCommentView view)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (ServiceProvider.GlobalProvider.GetService(typeof(SVsUIShell)) is IVsUIShell5 vsUIShell)
+            {
+                view.ViewModel.Background = new SolidColorBrush(
+                    vsUIShell.GetThemedWPFColor(EnvironmentColors.AccentMediumColorKey));
+                view.ViewModel.Accent = new SolidColorBrush(
+                    vsUIShell.GetThemedWPFColor(EnvironmentColors.AccentDarkColorKey));
+
+                if (layer.ClassificationFormatMap?.GetClassificationFormatMap(layer.View) 
+                        is IClassificationFormatMap classificationFormatMap &&
+                    layer.ClassificationTypeRegistry?.GetClassificationType("comment") 
+                        is IClassificationType commentClassificationType &&
+                    classificationFormatMap.GetTextProperties(commentClassificationType) 
+                        is TextFormattingRunProperties properties)
+                {
+                    view.ViewModel.Foreground = properties.ForegroundBrush as SolidColorBrush;
+                    
+                    view.FontFamily = new FontFamily(GetCurrentEditorFontFamily());
+                    view.FontSize = GetCurrentEditorFontSize() * 4 / 5;
+                }
             }
         }
     }
