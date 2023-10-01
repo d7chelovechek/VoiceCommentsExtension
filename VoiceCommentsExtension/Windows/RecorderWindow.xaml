@@ -51,21 +51,21 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Visibility="{Binding IsRecording, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"
-                Command="{Binding PauseRecordVoiceCommentCommand}"
+                Command="{Binding StopRecordingCommand}"
                 CommandParameter="{Binding}"
                 Margin="2.5 0 2.5 5"/>
         <Button Content="Record"
                 Grid.Row="1"
                 Grid.Column="1"
                 Visibility="{Binding IsRecording, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}"
-                Command="{Binding StartRecordVoiceCommentCommand}"
+                Command="{Binding StartRecordingCommand}"
                 CommandParameter="{Binding}"
                 Margin="2.5 0 2.5 5"/>
         
         <Button Content="Cancel"
                 Grid.Row="1"
                 Grid.Column="2"
-                Command="{Binding CancelRecordVoiceCommentCommand}"
+                Command="{Binding CancelRecordingCommand}"
                 CommandParameter="{Binding}"
                 Margin="2.5 0 5 5"/>
     </Grid>

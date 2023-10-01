@@ -2,7 +2,7 @@
 
 namespace VoiceCommentsExtension.Commands.RecorderCommands
 {
-    public class CancelRecordVoiceCommentCommand : BaseTypedCommand<RecorderViewModel>
+    public class CancelRecordingCommand : BaseTypedCommand<RecorderViewModel>
     {
         public override void Execute(RecorderViewModel viewModel)
         {

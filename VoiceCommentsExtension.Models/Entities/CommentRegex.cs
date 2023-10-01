@@ -9,8 +9,8 @@ namespace VoiceCommentsExtension.Models
 
         public CommentRegex(string commentPattern)
         {
-            Indent = new Regex(commentPattern, RegexOptions.Compiled);
-            FileName = new Regex($@"(?<={commentPattern}\s*)\S+", RegexOptions.Compiled);
+            Indent = new Regex($"{commentPattern} ", RegexOptions.Compiled);
+            FileName = new Regex($@"(?<={commentPattern} \s*)\S+", RegexOptions.Compiled);
         }
     }
 }

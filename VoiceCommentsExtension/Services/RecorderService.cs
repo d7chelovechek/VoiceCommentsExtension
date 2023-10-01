@@ -4,57 +4,85 @@ using System.IO;
 
 namespace VoiceCommentsExtension.Services
 {
-    public class RecorderService
+    public class RecorderService : IDisposable
     {
         public string FilePath { get; private set; }
 
-        public WaveInEvent Recorder { get; private set; }
-        public WaveFileWriter WaveFileWriter { get; private set; }
+        private readonly WaveInEvent _waveIn;
+        private readonly WaveFileWriter _writer;
 
         public bool IsRecording { get; set; }
         public bool DeleteFileNeeded { get; set; }
 
         public event Action CloseWindowNeeded;
 
+        private bool _isDisposed;
+
+        private bool _isRecordingStarted;
+
         public RecorderService()
         {
-            string fileName = Guid.NewGuid().ToString().Split('-')[4];
-            FilePath = $"{VisualStudioService.GetVoicesDirectory()}\\{fileName}.wav";
+            FilePath = TryGetFilePath(Guid.NewGuid().ToString().Split('-')[4]);
 
             if (FilePath is null)
             {
                 throw new NullReferenceException();
             }
 
-            Recorder = new WaveInEvent()
+            _waveIn = new WaveInEvent()
             {
                 WaveFormat = new WaveFormat(44100, 16, 1)
             };
+
+            _writer = new WaveFileWriter(FilePath, _waveIn.WaveFormat);
+        }
+
+        private string TryGetFilePath(string fileName)
+        {
+            string filePath = $"{VisualStudioService.GetVoicesDirectory()}\\{fileName}.wav";
+
+            if (File.Exists(filePath)) 
+            {
+                return TryGetFilePath(Guid.NewGuid().ToString().Split('-')[4]);
+            }
+
+            return filePath;
         }
 
         private void SubscribeToEvents()
         {
-            Recorder.DataAvailable += Recorder_DataAvailable;
-            Recorder.RecordingStopped += Recorder_RecordingStopped;
+            _waveIn.DataAvailable += Recorder_DataAvailable;
+            _waveIn.RecordingStopped += Recorder_RecordingStopped;
         }
 
         private void UnsubscribeFromEvents()
         {
-            Recorder.DataAvailable -= Recorder_DataAvailable;
-            Recorder.RecordingStopped -= Recorder_RecordingStopped;
+            _waveIn.DataAvailable -= Recorder_DataAvailable;
+            _waveIn.RecordingStopped -= Recorder_RecordingStopped;
         }
 
         public void StartRecording()
         {
+            if (_isRecordingStarted)
+            {
+                return;
+            }
+            _isRecordingStarted = true;
+
             SubscribeToEvents();
 
-            WaveFileWriter = new WaveFileWriter(FilePath, Recorder.WaveFormat);
-            Recorder.StartRecording();
+            _waveIn.StartRecording();
         }
 
         public void StopRecording() 
         {
-            Recorder.StopRecording();
+            if (!_isRecordingStarted)
+            {
+                return;
+            }
+            _isRecordingStarted = false;
+
+            _waveIn.StopRecording();
         }
 
         private void Recorder_DataAvailable(object sender, WaveInEventArgs e)
@@ -64,26 +92,40 @@ namespace VoiceCommentsExtension.Services
                 return;
             }
             
-            WaveFileWriter.Write(e.Buffer, 0, e.BytesRecorded);
+            _writer.Write(e.Buffer, 0, e.BytesRecorded);
         }
 
         private void Recorder_RecordingStopped(object sender, StoppedEventArgs e)
         {
-            WaveFileWriter.Close();
-            WaveFileWriter.Dispose();
+            Dispose();
+        }
+
+        public void InvokeCloseWindowNeededEvent()
+        {
+            CloseWindowNeeded?.Invoke();
+        }
+
+        public void Dispose()
+        {
+            if (_isDisposed)
+            {
+                return;
+            }
+            _isDisposed = true;
+
+            UnsubscribeFromEvents();
+
+            _waveIn.Dispose();
+
+            _writer.Close();
+            _writer.Dispose();
 
             if (DeleteFileNeeded && File.Exists(FilePath))
             {
                 File.Delete(FilePath);
             }
 
-            UnsubscribeFromEvents();
             InvokeCloseWindowNeededEvent();
-        }
-
-        public void InvokeCloseWindowNeededEvent()
-        {
-            CloseWindowNeeded?.Invoke();
         }
     }
 }

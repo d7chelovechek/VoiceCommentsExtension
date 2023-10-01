@@ -2,7 +2,7 @@
 
 namespace VoiceCommentsExtension.Commands.RecorderCommands
 {
-    public class PauseRecordVoiceCommentCommand : BaseTypedCommand<RecorderViewModel>
+    public class StopRecordingCommand : BaseTypedCommand<RecorderViewModel>
     {
         public override void Execute(RecorderViewModel viewModel)
         {

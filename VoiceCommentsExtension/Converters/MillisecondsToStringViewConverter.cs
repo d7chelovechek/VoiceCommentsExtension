@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 
 namespace VoiceCommentsExtension.Converters
 {
@@ -20,15 +19,15 @@ namespace VoiceCommentsExtension.Converters
                 needViewMilliseconds = false;
             }
 
-            if (value is double totalMilliseconds)
+            if (value is double milliseconds)
             {
-                var timeSpan = TimeSpan.FromMilliseconds(totalMilliseconds);
+                var timeSpan = TimeSpan.FromMilliseconds(milliseconds);
 
                 return string.Format("{0:D2}:{1:D2}", (int)timeSpan.TotalMinutes, timeSpan.Seconds) +
                     (needViewMilliseconds ? string.Format(".{0}", timeSpan.Milliseconds / 100) : "");
             }
 
-            return DependencyProperty.UnsetValue;
+            return "00:00";
         }
     }
 }

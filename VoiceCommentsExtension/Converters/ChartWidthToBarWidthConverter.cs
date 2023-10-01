@@ -16,7 +16,7 @@ namespace VoiceCommentsExtension.Converters
                 values[0] is double actualWidth &&
                 values[1] is int barsCount)
             {
-                return actualWidth / barsCount * 0.9;
+                return actualWidth / barsCount;
             }
 
             return DependencyProperty.UnsetValue;

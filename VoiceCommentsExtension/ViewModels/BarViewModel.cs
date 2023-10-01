@@ -1,4 +1,7 @@
-﻿namespace VoiceCommentsExtension.ViewModels
+﻿using System.Windows.Input;
+using VoiceCommentsExtension.Commands.BarCommands;
+
+namespace VoiceCommentsExtension.ViewModels
 {
     public class BarViewModel : BaseViewModel
     {
@@ -14,17 +17,17 @@
         }
         private VoiceCommentViewModel _voiceCommentViewModel;
 
-        public int Index
+        public long Bytes
         {
-            get => _index;
+            get => _bytes;
             set
             {
-                _index = value;
+                _bytes = value;
 
-                OnPropertyChanged(nameof(Index));
+                OnPropertyChanged(nameof(Bytes));
             }
         }
-        private int _index;
+        private long _bytes;
 
         public double Value
         {
@@ -37,5 +40,12 @@
             }
         }
         private double _value;
+
+        public ICommand RewindPlayingCommand { get; set; }
+
+        protected override void InitializeCommands()
+        {
+            RewindPlayingCommand = new RewindPlayingCommand();
+        }
     }
 }

@@ -97,9 +97,18 @@ namespace VoiceCommentsExtension.WorkLayer
             foreach (VoiceCommentView view 
                 in _voiceComments.Where(v => !v.ViewModel.IsInEditor).ToList())
             {
-                _layer.RemoveAdornment(view);
-                _voiceComments.Remove(view);
+                RemoveVoiceComment(view);
             }
+        }
+
+        private void RemoveVoiceComment(VoiceCommentView view)
+        {
+            _layer.RemoveAdornment(view);
+            _voiceComments.Remove(view);
+
+            view.ViewModel.Player.Dispose();
+            view.ViewModel.Dispose();
+            view.Dispose();
         }
 
         private void TryDrawVoiceCommentListener(

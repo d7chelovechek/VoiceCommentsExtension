@@ -52,11 +52,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\BarCommands\RewindPlayingCommand.cs" />
     <Compile Include="Commands\BaseTypedCommand.cs" />
-    <Compile Include="Commands\RecorderCommands\CancelRecordVoiceCommentCommand.cs" />
+    <Compile Include="Commands\RecorderCommands\CancelRecordingCommand.cs" />
     <Compile Include="Commands\RecorderCommands\SaveVoiceCommentCommand.cs" />
-    <Compile Include="Commands\RecorderCommands\StartRecordVoiceCommentCommand.cs" />
-    <Compile Include="Commands\RecorderCommands\PauseRecordVoiceCommentCommand.cs" />
+    <Compile Include="Commands\RecorderCommands\StartRecordingCommand.cs" />
+    <Compile Include="Commands\RecorderCommands\StopRecordingCommand.cs" />
+    <Compile Include="Commands\VoiceCommentCommands\StartPlayingCommand.cs" />
+    <Compile Include="Commands\VoiceCommentCommands\StopPlayingCommand.cs" />
+    <Compile Include="Converters\BarBytesToBarOpacity.cs" />
     <Compile Include="Converters\BarValueToBarHeightConverter.cs" />
     <Compile Include="Converters\BarWidthToMarginConverter.cs" />
     <Compile Include="Converters\BaseMultiValueConverter.cs" />
@@ -148,7 +152,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icon.png">
+    <Content Include="Resources\Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

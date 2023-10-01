@@ -1,11 +1,17 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace VoiceCommentsExtension.ViewModels
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private bool _isInitialized;
+
+        public BaseViewModel()
+        {
+            InitializeCommands();
+        }
 
         protected void OnPropertyChanged(string propertyName)
         {
@@ -15,11 +21,13 @@ namespace VoiceCommentsExtension.ViewModels
         }
 
         protected virtual void InitializeCommands()
-        { }
-
-        public BaseViewModel()
         {
-            InitializeCommands();
+            if (_isInitialized)
+            {
+                return;
+            }
+
+            _isInitialized = true;
         }
     }
 }

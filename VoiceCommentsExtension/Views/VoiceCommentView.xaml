@@ -16,38 +16,40 @@
     </UserControl.DataContext>
     <UserControl.Resources>
         <ResourceDictionary>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:BarBytesToBarOpacity x:Key="BarBytesToBarOpacity"/>
             <converters:BarValueToBarHeightConverter x:Key="BarValueToBarHeightConverter"/>
             <converters:BarWidthToMarginConverter x:Key="BarWidthToMarginConverter"/>
             <converters:ChartWidthToBarWidthConverter x:Key="ChartWidthToBarWidthConverter"/>
             <converters:MillisecondsToStringViewConverter x:Key="MillisecondsToStringViewConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
-   
+
     <Border CornerRadius="5"
             Background="{Binding Background, TargetNullValue=Gray}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2.5"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="{Binding ElementName=MainRow, Path=ActualHeight}"/>
                 <ColumnDefinition Width="2.5"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2.5"/>
             </Grid.ColumnDefinitions>
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="2.5"/>
-                <RowDefinition Height="3*"/>
-                <RowDefinition Height="2.5"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"
+                               x:Name="MainRow"/>
                 <RowDefinition Height="2.5"/>
             </Grid.RowDefinitions>
 
-            <Button Grid.RowSpan="3"
-                    Grid.Row="1"
-                    x:Name="PauseButton"
-                    Width="{Binding ElementName=PauseButton, Path=ActualHeight}"
-                    Grid.Column="1"
+            <Button Visibility="{Binding IsPlaying, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"
+                    Command="{Binding StopPlayingCommand}"
+                    CommandParameter="{Binding}"
                     Background="{Binding Background, TargetNullValue=Gray}"
-                    Foreground="{Binding Foreground, TargetNullValue=Green}">
+                    Foreground="{Binding Foreground, TargetNullValue=Green}"
+                    Grid.Row="1"
+                    Grid.Column="1">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Template">
@@ -98,13 +100,13 @@
                 </Button.Style>
             </Button>
 
-            <Button Grid.RowSpan="3"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    x:Name="PlayButton"
-                    Width="{Binding ElementName=PlayButton, Path=ActualHeight}"
+            <Button Visibility="{Binding IsPlaying, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}"
+                    Command="{Binding StartPlayingCommand}"
+                    CommandParameter="{Binding}"
                     Background="{Binding Background, TargetNullValue=Gray}"
-                    Foreground="{Binding Foreground, TargetNullValue=Green}">
+                    Foreground="{Binding Foreground, TargetNullValue=Green}"
+                    Grid.Row="1"
+                    Grid.Column="1">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Template">
@@ -149,61 +151,77 @@
                 </Button.Style>
             </Button>
 
-            <ItemsControl ItemsSource="{Binding Bars}"
-                          Grid.Row="1"
-                          Grid.Column="3"
-                          Foreground="{Binding Foreground, TargetNullValue=Green}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}, Path=Foreground}"
-                                x:Name="Bar"
-                                Margin="{Binding ElementName=Bar, Path=ActualWidth, Converter={StaticResource BarWidthToMarginConverter}}">
-                            <Button.Template>
-                                <ControlTemplate>
-                                    <Border Background="{TemplateBinding Background}"
-                                            Opacity="{TemplateBinding Opacity}"
-                                            CornerRadius="1"/>
-                                </ControlTemplate>
-                            </Button.Template>
-                            <Button.Height>
-                                <MultiBinding Converter="{StaticResource BarValueToBarHeightConverter}">
-                                    <Binding RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}}" 
-                                             Path="ActualHeight" />
-                                    <Binding Path="Value" />
-                                </MultiBinding>
-                            </Button.Height>
-                            <Button.Width>
-                                <MultiBinding Converter="{StaticResource ChartWidthToBarWidthConverter}">
-                                    <Binding RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}}" 
-                                             Path="ActualWidth" />
-                                    <Binding Path="VoiceCommentViewModel.Bars.Count" />
-                                </MultiBinding>
-                            </Button.Width>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Grid Grid.Column="3"
+                  Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="2.5"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
 
-            <TextBlock Text="00:00"
-                       Grid.Row="3"
-                       FontWeight="SemiBold"
-                       Grid.Column="3"
-                       Foreground="{Binding Foreground, TargetNullValue=Green}"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left"/>
+                <ItemsControl ItemsSource="{Binding Bars}"
+                              Foreground="{Binding Foreground, TargetNullValue=Green}"
+                              Background="{Binding Background, TargetNullValue=Gray}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding RewindPlayingCommand}"
+                                    CommandParameter="{Binding}">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Border Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}, Path=Background}"
+                                                Cursor="Hand">
+                                            <Border Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}, Path=Foreground}"
+                                                    CornerRadius="1"
+                                                    x:Name="Bar"
+                                                    Margin="{Binding ElementName=Bar, Path=ActualWidth, Converter={StaticResource BarWidthToMarginConverter}}">
+                                                <Border.Opacity>
+                                                    <MultiBinding Converter="{StaticResource BarBytesToBarOpacity}">
+                                                        <Binding Path="Bytes"/>
+                                                        <Binding Path="VoiceCommentViewModel.CurrentBytes"/>
+                                                    </MultiBinding>
+                                                </Border.Opacity>
+                                                <Border.Height>
+                                                    <MultiBinding Converter="{StaticResource BarValueToBarHeightConverter}">
+                                                        <Binding RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}}"
+                                                                 Path="ActualHeight" />
+                                                        <Binding Path="Value" />
+                                                    </MultiBinding>
+                                                </Border.Height>
+                                            </Border>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Button.Width>
+                                    <MultiBinding Converter="{StaticResource ChartWidthToBarWidthConverter}">
+                                        <Binding RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}}"
+                                                 Path="ActualWidth" />
+                                        <Binding Path="VoiceCommentViewModel.Bars.Count" />
+                                    </MultiBinding>
+                                </Button.Width>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-            <TextBlock Text="{Binding TotalMilliseconds, Converter={StaticResource MillisecondsToStringViewConverter}}"
-                       Grid.Row="3"
-                       FontWeight="SemiBold"
-                       Grid.Column="3"
-                       Foreground="{Binding Foreground, TargetNullValue=Green}"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Right"/>
+                <TextBlock Text="{Binding CurrentMilliseconds, Converter={StaticResource MillisecondsToStringViewConverter}}"
+                           Grid.Row="2"
+                           FontWeight="SemiBold"
+                           Foreground="{Binding Foreground, TargetNullValue=Green}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"/>
+
+                <TextBlock Text="{Binding TotalMilliseconds, Converter={StaticResource MillisecondsToStringViewConverter}}"
+                           Grid.Row="2"
+                           FontWeight="SemiBold"
+                           Foreground="{Binding Foreground, TargetNullValue=Green}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"/>
+            </Grid>
         </Grid>
     </Border>
 </UserControl>

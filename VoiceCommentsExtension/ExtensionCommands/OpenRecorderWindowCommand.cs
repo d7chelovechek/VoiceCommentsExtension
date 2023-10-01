@@ -32,14 +32,16 @@ namespace VoiceCommentsExtension.ExtensionCommands
             var dialog = new RecorderWindow();
             dialog.ShowDialog();
 
+            dialog.ViewModel.Dispose();
+
             switch (dialog.ViewModel.RecordingResult)
             {
                 case true:
                     {
                         document.TextBuffer.Insert(
                             point,
-                            $"\r\n{commentPattern}<voice-comment>" +
-                            $"\r\n{commentPattern}{Path.GetFileName(dialog.ViewModel.Recorder.FilePath)}");
+                            $"\r\n{commentPattern} <voice-comment>" +
+                            $"\r\n{commentPattern} {Path.GetFileName(dialog.ViewModel.Recorder.FilePath)}");
 
                         if (ServiceProvider.GlobalProvider.GetService(typeof(DTE)) is DTE2 dte)
                         {

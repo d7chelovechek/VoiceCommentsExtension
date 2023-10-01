@@ -2,7 +2,7 @@
 
 namespace VoiceCommentsExtension.Commands.RecorderCommands
 {
-    public class StartRecordVoiceCommentCommand : BaseTypedCommand<RecorderViewModel>
+    public class StartRecordingCommand : BaseTypedCommand<RecorderViewModel>
     {
         public override void Execute(RecorderViewModel viewModel)
         {
