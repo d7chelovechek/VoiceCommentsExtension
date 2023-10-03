@@ -54,8 +54,6 @@ namespace VoiceCommentsExtension.ViewModels
         public ICommand SaveVoiceCommentCommand { get; private set; }
         public ICommand StartRecordingCommand { get; private set; }
 
-        public event Action ClosingWindow;
-
         private const int _interval = 100;
 
         private bool _isDisposed;
@@ -69,11 +67,6 @@ namespace VoiceCommentsExtension.ViewModels
                 Interval = TimeSpan.FromMilliseconds(_interval)
             };
             Timer.Tick += Timer_Tick;
-        }
-
-        public void InvokeClosingWindowEvent()
-        {
-            ClosingWindow?.Invoke();
         }
 
         private void Timer_Tick(object sender, EventArgs e)

@@ -35,10 +35,47 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{Binding MillisecondsElapsed, Converter={StaticResource MillisecondsToStringViewConverter}, ConverterParameter=true}"
-                   Grid.ColumnSpan="3"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Grid.ColumnSpan="3"
+                    x:Name="kek"
+                    Orientation="Horizontal">
+            <Ellipse Fill="Red"
+                     Width="15"
+                     Opacity="0"
+                     Height="15"
+                     x:Name="RecodringEllipse">
+                <Ellipse.Style>
+                    <Style TargetType="Ellipse">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRecording}" 
+                                         Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard AutoReverse="True" RepeatBehavior="Forever">
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                        From="0.0" To="1.0" Duration="0:0:0.6" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                                                             To="0.0" 
+                                                             Duration="0:0:0.3" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Ellipse.Style>
+            </Ellipse>
+            <TextBlock Text="{Binding MillisecondsElapsed, Converter={StaticResource MillisecondsToStringViewConverter}, ConverterParameter=true}"
+                       Margin="10 0 0 0"
+                       VerticalAlignment="Center"/>
+        </StackPanel>
 
         <Button Content="Save"
                 Grid.Row="1"

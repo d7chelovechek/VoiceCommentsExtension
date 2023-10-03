@@ -47,20 +47,6 @@ namespace VoiceCommentsExtension.ViewModels
         }
         private SolidColorBrush _foreground;
 
-        public SolidColorBrush Accent
-        {
-            get => _accent;
-            set
-            {
-                _accent = value;
-
-                OnPropertyChanged(nameof(Accent));
-            }
-        }
-        private SolidColorBrush _accent;
-
-        public bool IsInEditor { get; set; }
-
         public PlayerService Player { get; private set; }
 
         public DispatcherTimer Timer { get; private set; }
