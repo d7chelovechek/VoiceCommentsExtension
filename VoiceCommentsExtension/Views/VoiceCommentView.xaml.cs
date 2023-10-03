@@ -1,9 +1,11 @@
 ﻿using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using VoiceCommentsExtension.Services;
 using VoiceCommentsExtension.ViewModels;
 
 namespace VoiceCommentsExtension.Views
@@ -34,7 +36,7 @@ namespace VoiceCommentsExtension.Views
                 element.TemplatedParent is not Button)
             {
                 e.Handled = true;
-                
+
                 return;
             }
         }
@@ -45,6 +47,7 @@ namespace VoiceCommentsExtension.Views
 
             Height = newHeight;
             Width = geometry.Bounds.Right - geometry.Bounds.Left;
+
             PlayerColumn.Width = new GridLength(newHeight - 10, GridUnitType.Pixel);
 
             Canvas.SetLeft(this, geometry.Bounds.Left);
@@ -65,6 +68,14 @@ namespace VoiceCommentsExtension.Views
             _isDisposed = true;
 
             UnsubscribeFromEvents();
+        }
+
+        public void InvalidateChart()
+        {
+            foreach (BarViewModel barViewModel in ViewModel.Bars)
+            {
+                Chart.Items.Add(barViewModel);
+            }
         }
     }
 }
