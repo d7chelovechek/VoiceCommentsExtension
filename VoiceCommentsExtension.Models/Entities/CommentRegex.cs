@@ -10,7 +10,7 @@ namespace VoiceCommentsExtension.Models
         public CommentRegex(string commentPattern)
         {
             Indent = new Regex($"{commentPattern} ", RegexOptions.Compiled);
-            FileName = new Regex($@"(?<={commentPattern} \s*)\S+", RegexOptions.Compiled);
+            FileName = new Regex(@"<voice-comment:(.*?)\/>", RegexOptions.Compiled);
         }
     }
 }

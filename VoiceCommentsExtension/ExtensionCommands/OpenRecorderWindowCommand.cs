@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Interop;
 using VoiceCommentsExtension.Services;
 using VoiceCommentsExtension.Windows;
 
@@ -40,8 +41,10 @@ namespace VoiceCommentsExtension.ExtensionCommands
                     {
                         document.TextBuffer.Insert(
                             point,
-                            $"\r\n{commentPattern} <voice-comment>" +
-                            $"\r\n{commentPattern} {Path.GetFileName(dialog.ViewModel.Recorder.FilePath)}");
+                            $"\r\n{commentPattern} " +
+                            $"\r\n{commentPattern} <voice-comment:" +
+                                $"{Path.GetFileName(dialog.ViewModel.Recorder.FilePath)}/>" +
+                            $"\r\n{commentPattern} ");
 
                         if (ServiceProvider.GlobalProvider.GetService(typeof(DTE)) is DTE2 dte)
                         {
