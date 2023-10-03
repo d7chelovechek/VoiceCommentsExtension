@@ -154,14 +154,14 @@
             <Grid Grid.Column="3"
                   Grid.Row="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="2.5"/>
-                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <ItemsControl ItemsSource="{Binding Bars}"
-                              Foreground="{Binding Foreground, TargetNullValue=Green}"
-                              Background="{Binding Background, TargetNullValue=Gray}">
+                <ItemsControl Foreground="{Binding Foreground, TargetNullValue=Green}"
+                              Background="{Binding Background, TargetNullValue=Gray}"
+                              x:Name="Chart">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal"/>
@@ -169,7 +169,8 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Command="{Binding RewindPlayingCommand}"
+                            <Button d:DataContext="{d:DesignInstance Type=viewModels:BarViewModel}"
+                                    Command="{Binding RewindPlayingCommand}"
                                     CommandParameter="{Binding}">
                                 <Button.Template>
                                     <ControlTemplate>
@@ -212,14 +213,12 @@
                            Grid.Row="2"
                            FontWeight="SemiBold"
                            Foreground="{Binding Foreground, TargetNullValue=Green}"
-                           VerticalAlignment="Center"
                            HorizontalAlignment="Left"/>
 
                 <TextBlock Text="{Binding TotalMilliseconds, Converter={StaticResource MillisecondsToStringViewConverter}}"
                            Grid.Row="2"
                            FontWeight="SemiBold"
                            Foreground="{Binding Foreground, TargetNullValue=Green}"
-                           VerticalAlignment="Center"
                            HorizontalAlignment="Right"/>
             </Grid>
         </Grid>

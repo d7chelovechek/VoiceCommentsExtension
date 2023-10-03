@@ -121,7 +121,7 @@ namespace VoiceCommentsExtension.WorkLayer
             string filePath)
         {
             var span = new SnapshotSpan(
-                View.TextSnapshot, 
+                View.TextSnapshot,
                 Span.FromBounds(
                     voiceCommentLine.Extent.Start.Position + matchIndex,
                     voiceCommentLine.Start + voiceCommentLine.Extent.Length));
@@ -137,6 +137,7 @@ namespace VoiceCommentsExtension.WorkLayer
             {
                 view = new VoiceCommentView();
                 view.ViewModel.InitializePlayer(filePath);
+                view.InvalidateChart();
 
                 _voiceComments.Add(view);
                 VisualStudioService.UpdateTheme(this, view);
