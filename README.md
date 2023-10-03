@@ -14,7 +14,7 @@ An extension for Visual Studio 2022 that allows to record and listen voice comme
 	- the Context menu of the code editor;
 	- using the keyboard shortcuts "Ctrl + K, Shift + R".
 
-![EditMenu](https://github.com/d7chelovechek/VoiceCommentsExtension/assets/73136877/57691486-273f-4ba0-9ea9-263cb585e52b) ![ContextMenu](https://github.com/d7chelovechek/VoiceCommentsExtension/assets/73136877/941904b8-1efb-4c6c-b5f4-8e2292322cb4)
+![EditMenu](https://github.com/d7chelovechek/VoiceCommentsExtension/assets/73136877/0d30b9c8-544b-4b92-912c-1d9d087dac6f) ![ContextMenu](https://github.com/d7chelovechek/VoiceCommentsExtension/assets/73136877/bfb0ce7e-87c4-4e45-8b15-485ec52072eb)
 
 * By opening Recorder, you can record a voice comment. The Recorder window allows you to:
 	- Start recording a voice comment;
@@ -22,14 +22,14 @@ An extension for Visual Studio 2022 that allows to record and listen voice comme
 	- Cancel recording of a voice comment;
 	- Save the voice comment recording (at the moment, all voice comments are saved in the current project in the ".voice-comments" folder).
 
-![RecorderView](https://github.com/d7chelovechek/VoiceCommentsExtension/assets/73136877/5b35b821-d37e-418d-9256-46b3be3d1fc5)
+![RecorderView](https://github.com/d7chelovechek/VoiceCommentsExtension/assets/73136877/bf3473f1-c995-48a0-8fcc-be352d7fd378)
 
 * After saving the voice comment recording, a voice comment player will be added to the current position of the caret in code editor. The voice comment player allows you to:
 	- Start listening a voice comment;
 	- Pause listening of a voice comment;
 	- Rewind listening of a voice comment by clicking on the voice visualizer.
 
-![VoiceCommentView](https://github.com/d7chelovechek/VoiceCommentsExtension/assets/73136877/18ffc589-dc1a-42b7-95aa-c053168f9701)
+![VoiceCommentView](https://github.com/d7chelovechek/VoiceCommentsExtension/assets/73136877/1288811e-07d8-4832-aba7-41122160deee)
 
 ## Features
 
