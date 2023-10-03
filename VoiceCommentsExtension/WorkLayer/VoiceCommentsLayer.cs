@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.Text.Formatting;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using VoiceCommentsExtension.Services;
@@ -15,7 +17,6 @@ namespace VoiceCommentsExtension.WorkLayer
 {
     public class VoiceCommentsLayer
     {
-        public ITextDocumentFactoryService TextDocumentFactory { get; set; }
         public IClassificationFormatMapService ClassificationFormatMap { get; set; }
         public IClassificationTypeRegistryService ClassificationTypeRegistry { get; set; }
 
@@ -60,24 +61,34 @@ namespace VoiceCommentsExtension.WorkLayer
         private void View_Closed(object sender, EventArgs e)
         {
             UnsubcribeToEvents();
+
+            foreach (VoiceCommentView view in _voiceComments.ToList())
+            {
+                RemoveVoiceComment(view);
+            }
         }
 
         private void View_LayoutChanged(object sender, TextViewLayoutChangedEventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            _voiceComments.ForEach(v => v.ViewModel.IsInEditor = false);
+            if (!e.VerticalTranslation && !e.HorizontalTranslation)
+            {
+                VisualStudioService.UpdateTheme(this, _voiceComments.ToArray());
+            }
 
-            for (var index = 0; index < View.TextViewLines.Count - 1; index++)
+            if (e.NewOrReformattedLines?.Any() is not true)
+            {
+                return;
+            }
+
+            foreach (ITextViewLine line in e.NewOrReformattedLines)
             {
                 try
                 {
-                    if (View.TextViewLines[index] is ITextViewLine line &&
-                        View.TextViewLines[index + 1] is ITextViewLine nextLine &&
-                        CommentsService.TryMatch(
+                    if (CommentsService.TryMatch(
                             _contentTypeName,
                             line.Extent.GetText(),
-                            nextLine.Extent.GetText(),
                             out string filePath)
                                 is int matchIndex &&
                         matchIndex >= 0 &&
@@ -86,18 +97,11 @@ namespace VoiceCommentsExtension.WorkLayer
                     {
                         TryDrawVoiceCommentListener(
                             line,
-                            line.Length > nextLine.Length ? line : nextLine,
                             matchIndex,
                             filePath);
                     }
                 }
                 catch { }
-            }
-
-            foreach (VoiceCommentView view 
-                in _voiceComments.Where(v => !v.ViewModel.IsInEditor).ToList())
-            {
-                RemoveVoiceComment(view);
             }
         }
 
@@ -112,16 +116,15 @@ namespace VoiceCommentsExtension.WorkLayer
         }
 
         private void TryDrawVoiceCommentListener(
-            ITextViewLine line,
-            ITextViewLine longestLine,
+            ITextViewLine voiceCommentLine,
             int matchIndex,
             string filePath)
         {
             var span = new SnapshotSpan(
                 View.TextSnapshot, 
                 Span.FromBounds(
-                    longestLine.Extent.Start.Position + matchIndex,
-                    longestLine.Start + longestLine.Extent.Length));
+                    voiceCommentLine.Extent.Start.Position + matchIndex,
+                    voiceCommentLine.Start + voiceCommentLine.Extent.Length));
             Geometry geometry = View.TextViewLines.GetMarkerGeometry(span);
 
             if (geometry is null)
@@ -130,33 +133,23 @@ namespace VoiceCommentsExtension.WorkLayer
             }
 
             if (_voiceComments.FirstOrDefault(v => filePath.Equals(v.ViewModel?.Player?.FilePath))
-                    is VoiceCommentView view)
-            {
-                _layer.RemoveAdornment(view);
-            }
-            else
+                    is not VoiceCommentView view)
             {
                 view = new VoiceCommentView();
                 view.ViewModel.InitializePlayer(filePath);
 
                 _voiceComments.Add(view);
+                VisualStudioService.UpdateTheme(this, view);
             }
 
-            view.Height = View.LineHeight * 2;
-            view.Width = geometry.Bounds.Right - geometry.Bounds.Left;
-            VisualStudioService.UpdateTheme(this, view);
-
-            Canvas.SetLeft(view, geometry.Bounds.Left);
-            Canvas.SetTop(view, line.TextTop);
+            view.InvalidateLayout(View, voiceCommentLine, geometry);
 
             _layer.AddAdornment(
                 AdornmentPositioningBehavior.TextRelative,
-                line.Extent,
+                voiceCommentLine.Extent,
                 null,
                 view,
                 null);
-
-            view.ViewModel.IsInEditor = true;
         }
     }
 }

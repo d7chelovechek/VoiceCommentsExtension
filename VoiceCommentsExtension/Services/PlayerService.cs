@@ -15,7 +15,7 @@ namespace VoiceCommentsExtension.Services
         private readonly WaveStream _reader;
         private readonly WaveOutEvent _waveOut;
 
-        private const int _parts = 32;
+        private const int _parts = 64;
 
         private bool _isDisposed;
 

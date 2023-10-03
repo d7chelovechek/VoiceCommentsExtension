@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Formatting;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Shapes;
+using System.Windows.Media;
 using VoiceCommentsExtension.ViewModels;
 
 namespace VoiceCommentsExtension.Views
@@ -35,6 +37,18 @@ namespace VoiceCommentsExtension.Views
                 
                 return;
             }
+        }
+
+        public void InvalidateLayout(IWpfTextView view, ITextViewLine line, Geometry geometry)
+        {
+            double newHeight = view.LineHeight * 3;
+
+            Height = newHeight;
+            Width = geometry.Bounds.Right - geometry.Bounds.Left;
+            PlayerColumn.Width = new GridLength(newHeight - 10, GridUnitType.Pixel);
+
+            Canvas.SetLeft(this, geometry.Bounds.Left);
+            Canvas.SetTop(this, line.TextTop - view.LineHeight);
         }
 
         private void UnsubscribeFromEvents()

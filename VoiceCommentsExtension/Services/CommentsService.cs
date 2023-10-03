@@ -30,26 +30,23 @@ namespace VoiceCommentsExtension.Services
 
         public static int TryMatch(
             string contentTypeName, 
-            string voiceComment, 
-            string fileNameComment, 
+            string voiceComment,
             out string filePath)
         {
-            if (voiceComment.Contains("<voice-comment>") && 
+            if (voiceComment.Contains("voice-comment") && 
                 _parsers.TryGetValue(contentTypeName, out CommentRegex regex))
             {
                 voiceComment = voiceComment.Split(
                     new[] { "\r\n", "\r" }, 
                     StringSplitOptions.None)[0];
-                fileNameComment = fileNameComment.Split(
-                    new[] { "\r\n", "\r" }, 
-                    StringSplitOptions.None)[0];
 
                 Match indentMatch = regex.Indent.Match(voiceComment);
-                Match fileNameMatch = regex.FileName.Match(fileNameComment);
+                Match fileNameMatch = regex.FileName.Match(voiceComment);
 
                 if (indentMatch.Success && fileNameMatch.Success)
                 {
-                    filePath = $"{VisualStudioService.GetVoicesDirectory()}\\{fileNameMatch.Value}";
+                    filePath = $"{VisualStudioService.GetVoicesDirectory()}" +
+                        $"\\{fileNameMatch.Groups[1].Value}";
 
                     return indentMatch.Index + indentMatch.Length;
                 }

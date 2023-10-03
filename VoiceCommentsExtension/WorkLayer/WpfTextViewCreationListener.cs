@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.Text;
+﻿using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
@@ -22,9 +23,6 @@ namespace VoiceCommentsExtension.WorkLayer
     [TextViewRole(PredefinedTextViewRoles.Document)]
     public class WpfTextViewCreationListener : IWpfTextViewCreationListener
     {
-        [Import] 
-        public ITextDocumentFactoryService TextDocumentFactory { get; set; }
-
         [Export(typeof(AdornmentLayerDefinition))]
         [Name("VoiceCommentsLayer")]
         [Order(After = PredefinedAdornmentLayers.Caret)]
@@ -49,7 +47,6 @@ namespace VoiceCommentsExtension.WorkLayer
                 "VoiceCommentsLayer", 
                 () => new VoiceCommentsLayer(textView));
 
-            layer.TextDocumentFactory = TextDocumentFactory;
             layer.ClassificationFormatMap = ClassificationFormatMap;
             layer.ClassificationTypeRegistry = ClassificationTypeRegistry;
         }
