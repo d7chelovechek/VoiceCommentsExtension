@@ -6,7 +6,6 @@ namespace VoiceCommentsExtension.Commands.RecorderCommands
     {
         public override void Execute(RecorderViewModel viewModel)
         {
-            viewModel.InvokeClosingWindowEvent();
             viewModel.Timer.Stop();
 
             viewModel.RecordingResult = true;

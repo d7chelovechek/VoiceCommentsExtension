@@ -1,8 +1,10 @@
-﻿using Microsoft.VisualStudio.PlatformUI;
+﻿using Microsoft.Internal.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.PlatformUI;
 using System;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using VoiceCommentsExtension.Services;
 using VoiceCommentsExtension.ViewModels;
 
@@ -22,26 +24,24 @@ namespace VoiceCommentsExtension.Windows
 
             SubscribeToEvents();
 
-            SetWindowPosition();
             SetWindowFont();
         }
 
         private void SubscribeToEvents()
         {
             ViewModel.Recorder.CloseWindowNeeded += OnCloseWindowNeeded;
-            ViewModel.ClosingWindow += OnClosingWindow;
+            SourceInitialized += RecorderWindow_SourceInitialized;
         }
 
-        private void OnClosingWindow()
+        private void RecorderWindow_SourceInitialized(object sender, EventArgs e)
         {
-            Visibility = System.Windows.Visibility.Collapsed;
-            Hide();
+            SetWindowPosition();
         }
 
         public void UnsubscribeFromEvents()
         {
             ViewModel.Recorder.CloseWindowNeeded -= OnCloseWindowNeeded;
-            ViewModel.ClosingWindow -= OnClosingWindow;
+            SourceInitialized -= RecorderWindow_SourceInitialized;
         }
 
         private void OnCloseWindowNeeded()
@@ -58,17 +58,24 @@ namespace VoiceCommentsExtension.Windows
             FontFamily = new FontFamily(font);
         }
 
-        public void SetWindowPosition()
+        private void SetWindowPosition()
         {
-            var helper = new WindowInteropHelper(this);
-            var screen = Screen.FromHandle(helper.Handle);
+            double top = System.Windows.Forms.Cursor.Position.Y;
+            double left = System.Windows.Forms.Cursor.Position.X;
 
-            Left = Math.Max(0, Math.Min(
-                System.Windows.Forms.Cursor.Position.X,
-                screen.WorkingArea.Width - Width));
-            Top = Math.Max(0, Math.Min(
-                System.Windows.Forms.Cursor.Position.Y,
-                screen.WorkingArea.Height - Height));
+            Screen screen = Screen.FromHandle(new WindowInteropHelper(this).Handle);
+
+            if (left + Width > screen.WorkingArea.Width)
+            {
+                left -= Width;
+            }
+            if (top + Height > screen.WorkingArea.Height)
+            {
+                top -= Height;
+            }
+
+            Top = top;
+            Left = left;
         }
 
         public void Dispose()
